@@ -212,6 +212,46 @@
                         "includeAuth": "false"
                     }
                 ]
+            },
+            {
+                "name": "Update Batch",
+                "data": [
+                    {
+                        "scenario": "update batch all fields valid",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 200,
+                        "expectedStatusMessage": "OK",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with invalid batch status",
+                        "batchStatus": "null",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with invalid endpoint",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "endpoint": "/batchestest/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch without Authorization",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "false"
+                    }
+                ]
             }
         ]
     }

@@ -40,8 +40,149 @@
                         "programName": "{{ProgramName}}",
                         "expectedStatusCode": 400,
                         "expectedStatusMessage": "Bad Request",
-                        "expectedResponseMessage": "batchName Please provide a valid name and must begin with letter and can have letters,numbers and sometimes hyphens",
-                        "expectedResponseStatus": false,
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with batchName starting with non-alphabet",
+                        "batchName": "3Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with batchName containing special characters",
+                        "batchName": "Team6$_Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with description starting with non-alphabet",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "6Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with description containing special characters",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team$_6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch without batch status",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with invalid batch status",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "AAA",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with no.of classes 0",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 0,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with no.of classes more than 2 digits",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 100,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with no.of classes negative number",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": -1,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with non-existing program id",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": 9999,
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "endpoint": "/batches",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "create batch with invalid program id",
+                        "batchName": "Team6-Status200-3",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": -1,
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
                         "endpoint": "/batches",
                         "includeAuth": "true"
                     },
@@ -72,6 +213,20 @@
                         "expectedStatusMessage": "Unauthorized",
                         "endpoint": "/batches",
                         "includeAuth": "false"
+                    },
+                    {
+                        "scenario": "create batch with invalid token",
+                        "batchName": "Team6-Status200-5",
+                        "batchDescription": "Team 6 Batch",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "endpoint": "/batches",
+                        "includeAuth": "invalid",
+                        "invalidToken": "Invalid_Token_Value_12345"
                     }
                 ]
             },
@@ -143,6 +298,15 @@
                         "includeAuth": "true"
                     },
                     {
+                        "scenario": "get batch by batchId invalid endpoint",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "expectedResponseCode": 404,
+                        "expectedResponseMessage": "Not Found",
+                        "endpoint": "/batchestest/batchId/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
                         "scenario": "get batch by batchId without Authorization",
                         "expectedStatusCode": 401,
                         "expectedStatusMessage": "Unauthorized",
@@ -150,6 +314,16 @@
                         "expectedResponseMessage": "Unauthorized",
                         "endpoint": "/batches/batchId/{{BatchId}}",
                         "includeAuth": "false"
+                    },
+                    {
+                        "scenario": "get batch by batchId with invalid Authorization",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "expectedResponseCode": 401,
+                        "expectedResponseMessage": "Unauthorized",
+                        "endpoint": "/batches/batchId/{{BatchId}}",
+                        "includeAuth": "invalid",
+                        "invalidToken": "Invalid_Token_Value_12345"
                     }
                 ]
             },
@@ -173,6 +347,15 @@
                         "includeAuth": "true"
                     },
                     {
+                        "scenario": "get batch by batchname invalid endpoint",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "expectedResponseCode": 404,
+                        "expectedResponseMessage": "Not Found",
+                        "endpoint": "/batchestest/batchName/{{BatchName}}",
+                        "includeAuth": "true"
+                    },
+                    {
                         "scenario": "get batch by batchName without Authorization",
                         "expectedStatusCode": 401,
                         "expectedStatusMessage": "Unauthorized",
@@ -180,6 +363,16 @@
                         "expectedResponseMessage": "Unauthorized",
                         "endpoint": "/batches/batchName/{{BatchName}}",
                         "includeAuth": "false"
+                    },
+                    {
+                        "scenario": "get batch by batchName invalid Authorization",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "expectedResponseCode": 401,
+                        "expectedResponseMessage": "Unauthorized",
+                        "endpoint": "/batches/batchName/{{BatchName}}",
+                        "includeAuth": "invalid",
+                        "invalidToken": "Invalid_Token_Value_12345"
                     }
                 ]
             },
@@ -210,6 +403,16 @@
                         "expectedResponseMessage": "Unauthorized",
                         "endpoint": "/batches/program/{{ProgramId}}",
                         "includeAuth": "false"
+                    },
+                    {
+                        "scenario": "get batch by programId with invalid Authorization",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "expectedResponseCode": 401,
+                        "expectedResponseMessage": "Unauthorized",
+                        "endpoint": "/batches/program/{{ProgramId}}",
+                        "includeAuth": "invalid",
+                        "invalidToken": "Invalid_Token_Value_12345"
                     }
                 ]
             },
@@ -230,8 +433,156 @@
                         "includeAuth": "true"
                     },
                     {
+                        "scenario": "update batch with empty batch name",
+                        "batchName": "",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with batch name starting with non alphabet",
+                        "batchName": "6Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with batch name containing special characters",
+                        "batchName": "Team6$_Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with description starting with non-alphabet",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "6Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with description containing special characters",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6$$ batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
                         "scenario": "update batch with invalid batch status",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
                         "batchStatus": "null",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with empty batch status",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with no.of classes 0",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 0,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with no.of classes more than 2 digits",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 100,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with no.of classes negative number",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": -1,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 400,
+                        "expectedStatusMessage": "Bad Request",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with non-existing program id",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": 9999,
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "update batch with invalid program id",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": -1,
+                        "programName": "{{ProgramName}}",
                         "expectedStatusCode": 400,
                         "expectedStatusMessage": "Bad Request",
                         "endpoint": "/batches/{{BatchId}}",
@@ -239,6 +590,12 @@
                     },
                     {
                         "scenario": "update batch with invalid endpoint",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
                         "expectedStatusCode": 404,
                         "expectedStatusMessage": "Not Found",
                         "endpoint": "/batchestest/{{BatchId}}",
@@ -246,10 +603,81 @@
                     },
                     {
                         "scenario": "update batch without Authorization",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
                         "expectedStatusCode": 401,
                         "expectedStatusMessage": "Unauthorized",
                         "endpoint": "/batches/{{BatchId}}",
                         "includeAuth": "false"
+                    },
+                    {
+                        "scenario": "update batch with invalid Authorization",
+                        "batchName": "Team6-Status200-Updated",
+                        "batchDescription": "Team 6 batch description",
+                        "batchStatus": "Active",
+                        "batchNoOfClasses": 10,
+                        "programId": "{{ProgramId}}",
+                        "programName": "{{ProgramName}}",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "includeAuth": "invalid",
+                        "invalidToken": "Invalid_Token_Value_12345"
+                    }
+                ]
+            },
+            {
+                "name": "Delete Batch By BatchId Negative Scenarios",
+                "data": [
+                    {
+                        "scenario": "delete batch with invalid batchId",
+                        "endpoint": "/batches/@{{BatchId}}",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "expectedResponseCode": 404,
+                        "expectedResponseMessage": "Not Found",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "delete batch with non-existing batchId",
+                        "endpoint": "/batches/-1",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "expectedResponseCode": 404,
+                        "expectedResponseMessage": "Not Found",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "delete batch with invalid endpoint",
+                        "endpoint": "/batchestest/{{BatchId}}",
+                        "expectedStatusCode": 404,
+                        "expectedStatusMessage": "Not Found",
+                        "expectedResponseCode": 404,
+                        "expectedResponseMessage": "Not Found",
+                        "includeAuth": "true"
+                    },
+                    {
+                        "scenario": "delete batch without Authorization",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "expectedResponseCode": 401,
+                        "expectedResponseMessage": "Unauthorized",
+                        "includeAuth": "false"
+                    },
+                    {
+                        "scenario": "delete batch with invalid Authorization",
+                        "endpoint": "/batches/{{BatchId}}",
+                        "expectedStatusCode": 401,
+                        "expectedStatusMessage": "Unauthorized",
+                        "expectedResponseCode": 401,
+                        "expectedResponseMessage": "Unauthorized",
+                        "includeAuth": "invalid",
+                        "invalidToken": "Invalid_Token_Value_12345"
                     }
                 ]
             }

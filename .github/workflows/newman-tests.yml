@@ -30,7 +30,7 @@ jobs:
         run: |
           newman run "Team 06_Status 200.postman_collection.json" \
             --environment "QA.postman_environment.json" \
-            --iteration-data "Team 06_status200.json" \
+            --iteration-data "Team06_status200.json" \
             --reporters cli,htmlextra \
             --reporter-htmlextra-export newman-report.html
         continue-on-error: true  # This ensures the workflow continues even if Newman tests fail

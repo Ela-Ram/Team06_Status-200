@@ -1,0 +1,3755 @@
+{
+	"info": {
+		"_postman_id": "e02443dd-ae42-4870-a053-de5501ce49c9",
+		"name": "Team 06_Status 200",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "42936802",
+		"_collection_link": "https://status-200-6444.postman.co/workspace/Team06_Status-200~0f577a50-9a7c-40e4-8586-24bd8093304b/collection/42936802-e02443dd-ae42-4870-a053-de5501ce49c9?action=share&source=collection_link&creator=42936802"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "Login for Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200)\r",
+									"{\r",
+									"    let response = pm.response.json(); \r",
+									"    pm.environment.set(\"BearerToken\", response.token);\r",
+									"}  "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"userLoginEmailId\": \"{{username}}\",\r\n\"password\": \"{{password}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Program",
+			"item": [
+				{
+					"name": "Post Program",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {  \r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(\"Full API Response:\", JSON.stringify(jsonData, null, 1));\r",
+									"\r",
+									"   \r",
+									"    let programIds = pm.environment.get(\"programIds\");\r",
+									"\r",
+									"    try {\r",
+									"        //storing program id in to callection veriable to delete in future\r",
+									"        programIds = programIds ? JSON.parse(programIds) : [];\r",
+									"\r",
+									"    } catch (e) {\r",
+									"        console.log(\"Error parsing programIds, resetting to empty array.\");\r",
+									"        programIds = [];\r",
+									"    }\r",
+									"\r",
+									"    if (jsonData.programId && !programIds.includes(jsonData.programId)) {\r",
+									"        programIds.push(jsonData.programId);\r",
+									"        pm.environment.set(\"programIds\", JSON.stringify(programIds));\r",
+									"        console.log(\"Updated programIds array:\", programIds);\r",
+									"        pm.environment.set(\"programID\",String(programIds[0]));\r",
+									"    } else {\r",
+									"        console.log(\"programId already exists or not found in response.\");\r",
+									"    }\r",
+									"\r",
+									" \r",
+									"    let ProgramNames = pm.environment.get(\"ProgramNames\");\r",
+									"\r",
+									"    try {\r",
+									"   \r",
+									"        ProgramNames = ProgramNames ? JSON.parse(ProgramNames) : [];\r",
+									"\r",
+									"    } catch (e) {\r",
+									"        console.log(\"Error parsing programNames, resetting to empty array.\");\r",
+									"        ProgramNames = [];\r",
+									"    }\r",
+									"\r",
+									"    if (jsonData.programName && !ProgramNames.includes(jsonData.programName)) {\r",
+									"        ProgramNames.push(jsonData.programName);\r",
+									"        pm.environment.set(\"ProgramNames\", JSON.stringify(ProgramNames));\r",
+									"        pm.environment.set(\"ProgramName\", String(ProgramNames[1]));\r",
+									"        // pm.environment.set(\"ProgramName\",ProgramNames[1] );\r",
+									"        console.log(\"Updated programName array:\",pm.environment.get(\"ProgramName\"));\r",
+									"    } else {\r",
+									"        console.log(\"programName already exists or not found in response.\");\r",
+									"    }\r",
+									"}\r",
+									"else \r",
+									"{\r",
+									"console.log(\"201 not found in responce\", pm.response.code);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"programDescription\": \"{{programDescription}}\",\r\n\"programName\": \"{{programName}}\",\r\n\"programStatus\": \"{{programStatus}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Programs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Programs with Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Program by programId",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Program by ProgramName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {  // Ensure the response is successful\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(\"Full API Response:\", JSON.stringify(jsonData, null, 0));\r",
+									"    \r",
+									"    // // Storing Program Names in an array for reference\r",
+									"    let ProgramName = pm.environment.get(\"ProgramName\");\r",
+									"\r",
+									"    try {\r",
+									"    //storing program name in to callection veriable to delete in future \r",
+									"      pm.environment.set(\"ProgramName\",jsonData.programName);\r",
+									"\r",
+									"    } catch (e) {\r",
+									"\r",
+									"        console.log(\"Error parsing programNames, resetting to empty array.\");\r",
+									"       \r",
+									"    }\r",
+									"}\r",
+									"else \r",
+									"{\r",
+									"console.log(\"201 not found in put responce\", pm.response.code);\r",
+									"}\r",
+									"//{\"programId\":18156,\"programName\":\"Camp-corale-ad\",\"programDescription\":\"SDET and DA\",\"programStatus\":\"Active\",\"creationTime\":\"2025-03-12T02:16:05.949+00:00\",\"lastModTime\":\"2025-03-12T02:16:08.776+00:00\"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(\"put Full Request URL:\", pm.request.url.toString());\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"programDescription\": \"{{programDescription}}\",\r\n\"programName\": \"{{rep_programName}}\",\r\n\"programStatus\": \"{{programStatus}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PUT Program by ProgramId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {  // Ensure the response is successful\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(\"Full API Response:\", JSON.stringify(jsonData, null, 0));\r",
+									"    \r",
+									"    // // Storing Program Names in an array for reference\r",
+									"    let ProgramName = pm.environment.get(\"programID\");\r",
+									"\r",
+									"    try {\r",
+									"    //storing program name in to callection veriable to delete in future \r",
+									"      pm.environment.set(\"programID\",jsonData.programId);\r",
+									"\r",
+									"    } catch (e) {\r",
+									"\r",
+									"        console.log(\"Error parsing programNames, resetting to empty array.\");\r",
+									"       \r",
+									"    }\r",
+									"}\r",
+									"else \r",
+									"{\r",
+									"console.log(\"201 not found in put responce\", pm.response.code);\r",
+									"}\r",
+									"//{\"programId\":18156,\"programName\":\"Camp-corale-ad\",\"programDescription\":\"SDET and DA\",\"programStatus\":\"Active\",\"creationTime\":\"2025-03-12T02:16:05.949+00:00\",\"lastModTime\":\"2025-03-12T02:16:08.776+00:00\"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"console.log(\"programe ID in put:\", pm.environment.get(\"programID\"));"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"programDescription\": \"{{programDescription}}\",\r\n\"programName\": \"{{rep_programName}}\",\r\n\"programStatus\": \"{{programStatus}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Batch",
+			"item": [
+				{
+					"name": "Create Batch",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"\r",
+									"    var jsonData = pm.response.json();\r",
+									"\r",
+									"    // Check if the response contains the batchId field\r",
+									"    if (jsonData && jsonData.batchId && jsonData.batchName) {\r",
+									"    \r",
+									"        pm.environment.set(\"BatchId\", jsonData.batchId);              \r",
+									"        pm.environment.set(\"BatchName\", jsonData.batchName);\r",
+									"        console.log(\"Batch ID: \" + jsonData.batchId + \" Batch Name: \" + jsonData.batchName);  \r",
+									"            \r",
+									"    } else {\r",
+									"        console.log(\"Batch ID/Batch Name not found in the response.\");\r",
+									"    }\r",
+									"\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{  \r\n  \"batchName\": \"{{batchName}}\",\r\n  \"batchDescription\": \"{{batchDescription}}\",\r\n  \"batchStatus\": \"{{batchStatus}}\",\r\n  \"batchNoOfClasses\": {{batchNoOfClasses}},\r\n  \"programId\": {{programId}},\r\n  \"programName\": \"{{programName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Batches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Batch By BatchId",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Batch By BatchName",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code == 200) {\r",
+									"\r",
+									"    let url = pm.request.url.toString(); \r",
+									"    let parts = url.split('/'); \r",
+									"    let requestBatchName = parts.pop(); \r",
+									"\r",
+									"    console.log(\"Extracted batchname:\", requestBatchName);\r",
+									"\r",
+									"    let responseBody = pm.response.json(); \r",
+									"\r",
+									"    pm.test(\"Response should contain the requested batchName\", function () {\r",
+									"         pm.expect(responseBody).to.be.an(\"array\").that.is.not.empty;\r",
+									"\r",
+									"        \r",
+									"        let found = responseBody.some(batch => batch.batchName === requestBatchName);\r",
+									"        pm.expect(found, `Batch with name '${requestBatchName}' should exist in response`).to.be.true;\r",
+									"    });\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Batch By ProgramId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code == 200) {\r",
+									"    let url = pm.request.url.toString(); \r",
+									"    let parts = url.split('/'); \r",
+									"    let requestProgramId = parts.pop(); \r",
+									"\r",
+									"    console.log(\"Extracted ProgramId:\", requestProgramId);\r",
+									"\r",
+									"    let responseBody = pm.response.json(); \r",
+									"\r",
+									"    pm.test(\"Response should contain the requested programId\", function () {\r",
+									"        pm.expect(responseBody).to.be.an(\"array\").that.is.not.empty;\r",
+									"\r",
+									"        let found = responseBody.some(batch => batch.programId.toString() === requestProgramId);\r",
+									"        pm.expect(found, `Batch with programId '${requestProgramId}' should exist in response`).to.be.true;\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Batch",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"batchDescription\": \"{{batchDescription}}\",  \r\n  \"batchName\": \"{{batchName}}\",\r\n  \"batchNoOfClasses\": {{batchNoOfClasses}},\r\n  \"batchStatus\": \"{{batchStatus}}\",\r\n  \"programId\": {{programId}},\r\n  \"programName\":\"{{programName}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}}}/{{endpoint}}",
+							"host": [
+								"{{Base_URL}}}}"
+							],
+							"path": [
+								"{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"// Fetch program id and program name from environment variables\r",
+							"let envProgramIds = pm.environment.get(\"programIds\");\r",
+							"let envProgramNames = pm.environment.get(\"ProgramNames\");\r",
+							"\r",
+							"let programId = (envProgramIds && Array.isArray(envProgramIds)) ? envProgramIds[0] : null;\r",
+							"let programName = (envProgramNames && Array.isArray(envProgramNames)) ? envProgramNames[0] : null;\r",
+							"\r",
+							"// If values are missing, assign default values\r",
+							"if (!programId) {\r",
+							"    programId = 16767;\r",
+							"}\r",
+							"\r",
+							"if (!programName) {\r",
+							"    programName = \"IJava\";\r",
+							"}\r",
+							"\r",
+							"// Set variables for use in the request\r",
+							"pm.variables.set(\"ProgramId\", programId);\r",
+							"pm.variables.set(\"ProgramName\", programName);\r",
+							"\r",
+							"// console.log(\"ProgramId inside Batch:\", pm.variables.get(\"ProgramId\"));\r",
+							"// console.log(\"ProgramName inside Batch:\", pm.variables.get(\"ProgramName\"));\r",
+							"\r",
+							"\r",
+							"// Append BatchName with unique id.\r",
+							"const uniqueId = Math.floor(Math.random() * 10000);\r",
+							"let batchName = pm.variables.get(\"batchName\");\r",
+							"\r",
+							"// If batchname from external file is not empty, append the batchname with unique id.\r",
+							"if (batchName && batchName != '')\r",
+							"{\r",
+							"    batchName = `${batchName}-${uniqueId}`;\r",
+							"    pm.variables.set(\"batchName\",batchName);\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"const batchSchema = {\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"batchId\": { \"type\": \"integer\" },\r",
+							"    \"batchName\": { \"type\": \"string\" },\r",
+							"    \"batchDescription\": { \"type\": [\"string\", \"null\"] },\r",
+							"    \"batchStatus\": { \"type\": \"string\", \"enum\": [\"Active\", \"Inactive\"] },\r",
+							"    \"batchNoOfClasses\": { \"type\": \"integer\", \"minimum\": 1 },\r",
+							"    \"programId\": { \"type\": \"integer\" },\r",
+							"    \"programName\": { \"type\": \"string\" }\r",
+							"  },\r",
+							"  \"required\": [\"batchName\", \"batchStatus\", \"batchNoOfClasses\", \"programId\", \"programName\"],\r",
+							"  \"additionalProperties\": false\r",
+							"};\r",
+							"\r",
+							"const batchArraySchema = {\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": { \"$ref\": \"#/definitions/batchSchema\" },\r",
+							"  \"definitions\": {\r",
+							"    \"batchSchema\": batchSchema\r",
+							"  }\r",
+							"};\r",
+							"\r",
+							"let scenario = pm.variables.get(\"scenario\");\r",
+							"let testScenario = `${pm.info.requestName} - ${scenario}`;\r",
+							"\r",
+							"// Schema validation for single batch (Get by ID, Create Batch, Update Batch)\r",
+							"let requestName = pm.info.requestName;\r",
+							"if ((pm.response.code == 200 || pm.response.code == 201) && (requestName.includes('Get Batch By BatchId') || requestName.includes('Create Batch') || requestName.includes('Update Batch')))\r",
+							"{  \r",
+							"    // Perform schema validation for the response body\r",
+							"    pm.test(`Schema validation ${testScenario}`, function () {\r",
+							"        pm.response.to.have.jsonSchema(batchSchema);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// Schema validation for multiple batches\r",
+							"if (pm.response.code == 200 && (requestName.includes('Get All Batches') || requestName.includes('Get Batch By BatchName') || requestName.includes('Get Batch By ProgramId')))\r",
+							"{  \r",
+							"    // Perform schema validation for the response body\r",
+							"    pm.test(`Schema validation for ${testScenario}`, function () {\r",
+							"        pm.response.to.have.jsonSchema(batchArraySchema);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"// Data validation for successful POST and PUT\r",
+							"if ((pm.response.code === 201 && requestName.includes('Create Batch')) \r",
+							"|| (pm.response.code === 200 && requestName.includes('Update Batch'))) {\r",
+							"\r",
+							"    let responseBody = pm.response.json(); // Get API response  \r",
+							"    let batchName = pm.variables.get(\"batchName\"); \r",
+							"    let batchDescription = pm.variables.get(\"batchDescription\");\r",
+							"    let batchStatus = pm.variables.get(\"batchStatus\");\r",
+							"    let batchNoOfClasses = pm.variables.get(\"batchNoOfClasses\");\r",
+							"\r",
+							"    pm.test(`Response should match the request body for ${testScenario}`, function () {\r",
+							"        pm.expect(responseBody).to.be.an(\"object\");\r",
+							"        \r",
+							"        pm.expect(responseBody.batchName).to.eql(batchName);\r",
+							"        pm.expect(responseBody.batchDescription).to.eql(batchDescription);\r",
+							"        pm.expect(responseBody.batchStatus).to.eql(batchStatus);\r",
+							"        pm.expect(responseBody.batchNoOfClasses).to.eql(batchNoOfClasses);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"if (pm.response.code == 200 && (requestName.includes('Get Batch By BatchId') \r",
+							"    || requestName.includes('Update Batch'))) {\r",
+							"\r",
+							"    let url = pm.request.url.toString(); // Get request URL as a string\r",
+							"    let parts = url.split('/'); // Split URL by \"/\"\r",
+							"    let requestBatchId = parts.pop(); // Get the last part (batchId is at the end)\r",
+							"\r",
+							"    console.log(\"Extracted batchId:\", requestBatchId);\r",
+							"\r",
+							"    let responseBody = pm.response.json(); // Get response JSON\r",
+							"\r",
+							"    pm.test(`Response should contain the requested batchId for ${testScenario}`, function () {\r",
+							"        pm.expect(responseBody).to.have.property(\"batchId\");\r",
+							"        pm.expect(responseBody.batchId.toString()).to.eql(requestBatchId);\r",
+							"    });\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Creating User with Role",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    console.log(\"Full API Response:\", JSON.stringify(jsonData, null, 2));\r",
+									"\r",
+									"    if (jsonData.user && jsonData.user.userId) {\r",
+									"        var roleId = jsonData.roles && jsonData.roles.length > 0 ? jsonData.roles[0].roleId : null;\r",
+									"        var userId = jsonData.user.userId;\r",
+									"        \r",
+									"        // Store the latest roleId as a collection variable\r",
+									"        if (roleId) {\r",
+									"            pm.collectionVariables.set(\"latestRoleId\", roleId);\r",
+									"            console.log(\"Latest Role ID stored:\", roleId);\r",
+									"        }\r",
+									"\r",
+									"        // Store roleId separately for R01, R02, and other roles\r",
+									"        if (roleId === \"R01\") {\r",
+									"            pm.collectionVariables.set(\"adminRoleId\", roleId);\r",
+									"        } else if (roleId === \"R02\") {\r",
+									"            pm.collectionVariables.set(\"staffRoleId\", roleId);\r",
+									"        }else if(roleId === \"R03\"){\r",
+									"            pm.collectionVariables.set(\"studentRoleId\", roleId);\r",
+									"   \r",
+									"        } else {\r",
+									"            console.log(\"roleId is not genereated\")\r",
+									"        }\r",
+									"        if (roleId === \"R01\") {\r",
+									"            pm.environment.set(\"adminUserId\", userId);\r",
+									"            console.log(\"Admin User ID saved:\", userId);\r",
+									"        } else if (roleId === \"R02\") {\r",
+									"            pm.environment.set(\"staffUserId\", userId);\r",
+									"            console.log(\"Staff User ID saved:\", userId);\r",
+									"        } else if (roleId === \"R03\") {\r",
+									"            pm.environment.set(\"studentUserId\", userId);\r",
+									"            console.log(\"Student User ID saved:\", userId);\r",
+									"        } else {\r",
+									"            console.log(\"Role not found. No User ID saved.\");\r",
+									"        }\r",
+									"\r",
+									"    \r",
+									"        let userIds = pm.collectionVariables.get(\"userIds\");\r",
+									"        if (!userIds) {\r",
+									"            userIds = [];\r",
+									"        } else {\r",
+									"            try {\r",
+									"                userIds = JSON.parse(userIds);\r",
+									"            } catch (e) {\r",
+									"                console.log(\"Parsing failed, so resetting the array.\");\r",
+									"                userIds = [];\r",
+									"            }\r",
+									"        }\r",
+									"        \r",
+									"        if (!userIds.includes(userId)) {\r",
+									"            userIds.push(userId);\r",
+									"        }\r",
+									"        \r",
+									"        pm.collectionVariables.set(\"userIds\", JSON.stringify(userIds));\r",
+									"        console.log(\"Updated userIds array:\", userIds);\r",
+									"    } else {\r",
+									"        console.log(\"userId missing in the response.\");\r",
+									"    }\r",
+									"\r",
+									"    pm.test(`UserId pattern is matching`, function () {\r",
+									"        let userId = jsonData.user.userId;\r",
+									"        let pattern = /^U\\d+$/; \r",
+									"        pm.expect(userId).to.match(pattern);\r",
+									"    });\r",
+									"\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Function to generate a random 10-digit phone number in the format +1 1234567891\r",
+									"function generateRandomPhoneNumber() {\r",
+									"    let min = 1000000000; // Smallest 10-digit number\r",
+									"    let max = 9999999999; // Largest 10-digit number\r",
+									"    return \"+1 \" + Math.floor(Math.random() * (max - min + 1) + min);\r",
+									"}\r",
+									"\r",
+									"// Function to generate a random email\r",
+									"function generateRandomEmail() {\r",
+									"    let randomNum = Math.floor(Math.random() * 10000); // Generate a random number\r",
+									"    return \"abc\" + randomNum + \"@gmail.com\"; // Generate a unique email\r",
+									"}\r",
+									"\r",
+									"// Assign to local variables\r",
+									"let randomPhoneNumber = generateRandomPhoneNumber();\r",
+									"let randomEmail = generateRandomEmail();\r",
+									"\r",
+									"// Store in Postman local variables (for this request only)\r",
+									"pm.variables.set(\"randomPhoneNumber\", randomPhoneNumber);\r",
+									"pm.variables.set(\"randomEmail\", randomEmail);\r",
+									"\r",
+									"console.log(\"Generated Phone Number:\", randomPhoneNumber);\r",
+									"console.log(\"Generated Email:\", randomEmail);\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userComments\": \"{{userComments}}\",\r\n    \"userEduPg\": \"{{userEduPg}}\",\r\n    \"userEduUg\": \"{{userEduUg}}\",\r\n    \"userFirstName\": \"{{userFirstName}}\",\r\n    \"userLastName\": \"{{userLastName}}\",\r\n    \"userLinkedinUrl\": \"{{userLinkedinUrl}}\",\r\n    \"userLocation\": \"{{userLocation}}\",\r\n    \"userMiddleName\": \"{{userMiddleName}}\",\r\n    \"userPhoneNumber\": \"{{userPhoneNumber}}\",\r\n    \"userRoleMaps\": [\r\n        {\r\n            \"roleId\": \"{{roleId}}\",\r\n            \"userRoleStatus\":\"{{userRoleStatus}}\"\r\n        }\r\n    ],\r\n    \"userTimeZone\":\"{{userTimeZone}}\",\r\n    \"userVisaStatus\":\"{{userVisaStatus}}\",\r\n    \"userLogin\": {\r\n        \"loginStatus\":\"{{loginStatus}}\",\r\n        \"userLoginEmail\":\"{{userLoginEmail}}\"\r\n    }\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User with UserID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"let userId = \"\";\r",
+									"let roleId = pm.collectionVariables.get(\"latestRoleId\"); \r",
+									"\r",
+									"\r",
+									"let adminUserId = pm.environment.get(\"adminUserId\");\r",
+									"let staffUserId = pm.environment.get(\"staffUserId\");\r",
+									"let studentUserId = pm.environment.get(\"studentUserId\");\r",
+									"\r",
+									"\r",
+									"if (roleId === pm.collectionVariables.get(\"adminRoleId\")) {\r",
+									"    userId = adminUserId;\r",
+									"} else if (roleId === pm.collectionVariables.get(\"staffRoleId\")) {\r",
+									"    userId = staffUserId;\r",
+									"} else if (roleId === pm.collectionVariables.get(\"studentRoleId\")) {\r",
+									"    userId = studentUserId;\r",
+									"} else {\r",
+									"    console.log(\"Role ID not matched. No userId assigned.\");\r",
+									"}\r",
+									"\r",
+									"\r",
+									"pm.collectionVariables.set(\"Created_userId\", userId);\r",
+									"console.log(\"Using User ID for PUT:\", userId);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\":\"{{userId}}\" ,  \r\n     \"userFirstName\": \"{{userFirstName}}\",\r\n     \"userMiddleName\": \"{{userMiddleName}}\",\r\n     \"userLastName\": \"{{userLastName}}\",\r\n     \"userPhoneNumber\": \"{{userPhoneNumber}}\",\r\n     \"userLoginEmail\":\"{{userLoginEmail}}\",                                                                                                 \r\n     \"userLinkedinUrl\": \"{{userLinkedinUrl}}\",\r\n     \"userLocation\": \"{{userLocation}}\", \r\n      \"userTimeZone\": \"{{userTimeZone}}\",                                              \r\n      \"userVisaStatus\": \"{{userVisaStatus}}\",\r\n      \"userEduUg\": \"{{userEduUg}}\",\r\n     \"userEduPg\": \"{{userEduPg}}\",\r\n     \"userComments\": \"{{userComments}}\"\r\n  \r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User RoleID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let scenario = pm.variables.get(\"scenario1\");\r",
+									"let expectedStatusCode = pm.variables.get(\"expectedStatusCode\");\r",
+									"let expectedStatusMessage = pm.variables.get(\"expectedStatusMessage\");\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let responseText = pm.response.text(); \r",
+									"    let storedUserId = pm.collectionVariables.get(\"Created_userId\"); // Retrieve stored userId\r",
+									"\r",
+									"    let expectedMessage = `Role Id Updated for User: ${storedUserId}`;\r",
+									"\r",
+									"    pm.test(`Role Id updated for user (${storedUserId})`, function () {\r",
+									"        pm.expect(responseText).to.include(expectedMessage);\r",
+									"    });\r",
+									"\r",
+									"    commonTests.validateStatusLine(expectedStatusCode, expectedStatusMessage);\r",
+									"    commonTests.validateResponseTime();\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userRoleList\": [\r\n    {\r\n      \"roleId\": \"{{roleId}}\",\r\n      \"userRoleStatus\": \"{{userRoleStatus}}\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Role Program Batch Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let scenario = pm.variables.get(\"scenario1\");\r",
+									"let expectedStatusCode = pm.variables.get(\"expectedStatusCode\");\r",
+									"let expectedStatusMessage = pm.variables.get(\"expectedStatusMessage\");\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let responseText = pm.response.text(); \r",
+									"    let storedUserId = pm.collectionVariables.get(\"Created_userId\"); // Retrieve stored userId\r",
+									"\r",
+									"    let expectedMessage = `User ${storedUserId} has been successfully assigned to Program/Batch(es)`;\r",
+									"\r",
+									"\r",
+									"    pm.test(` User (${storedUserId}) has beeb assigned suceesfully`, function () {\r",
+									"        pm.expect(responseText).to.include(expectedMessage);\r",
+									"    });\r",
+									"\r",
+									"    commonTests.validateStatusLine(expectedStatusCode, expectedStatusMessage);\r",
+									"    commonTests.validateResponseTime();\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userId\": \"{{userId}}\",\r\n  \"roleId\": \"{{roleId}}\",\r\n  \"programId\": \"18246\",\r\n  \"userRoleProgramBatches\": [\r\n    {\r\n      \"batchId\":\"10597\",\r\n      \"userRoleProgramBatchStatus\": \"{{userRoleProgramBatchStatus}}\"\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Login Status",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let scenario = pm.variables.get(\"scenario1\");\r",
+									"let expectedStatusCode = pm.variables.get(\"expectedStatusCode\");\r",
+									"let expectedStatusMessage = pm.variables.get(\"expectedStatusMessage\");\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let responseText = pm.response.text(); \r",
+									"    let storedUserId = pm.collectionVariables.get(\"Created_userId\"); \r",
+									"\r",
+									"    let expectedMessage = `UserLoginEmail/Status Updated for User: ${storedUserId}`;\r",
+									"\r",
+									"    pm.test(` UserLoginEmail/Status (${storedUserId})`, function () {\r",
+									"        pm.expect(responseText).to.include(expectedMessage);\r",
+									"    });\r",
+									"\r",
+									"    commonTests.validateStatusLine(expectedStatusCode, expectedStatusMessage);\r",
+									"    commonTests.validateResponseTime();\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"packages": {},
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userLoginEmail\": \"{{userLoginEmail}}\",\r\n  \"loginStatus\": \"{{loginStatus}}\",\r\n  \"status\": \"{{status}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users Combined",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"let endpoint = pm.variables.get(\"endpoint\");\r",
+									"\r",
+									"\r",
+									"  if (endpoint) {\r",
+									"    pm.variables.set(\"endpoint\", endpoint);\r",
+									"    \r",
+									"}else{\r",
+									"    console.log(\"no endpoint\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}/{{endpoint}}",
+							"host": [
+								"{{Base_URL}}"
+							],
+							"path": [
+								"{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Count of Active/Inactive Users",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"let adminRollid = pm.collectionVariables.get(\"adminRoleId\");\r",
+									"let staffRollid = pm.collectionVariables.get(\"staffRoleId\");\r",
+									"let studentRollid = pm.collectionVariables.get(\"studentRoleId\");\r",
+									"let scenario1 = pm.variables.get(\"scenario1\");\r",
+									"let endpoint = pm.variables.get(\"endpoint\");\r",
+									"\r",
+									"let baseUrl = pm.environment.get(\"Base_URL\");\r",
+									"\r",
+									"if (scenario1 === \"by all\") {\r",
+									"    let idValue = pm.variables.get(\"idValue\"); \r",
+									"    let fullUrl = `${baseUrl}${endpoint}?id=${idValue}`; \r",
+									"    pm.request.url = fullUrl; \r",
+									"}else if (scenario1 === \"by Admin rollId\") \r",
+									"{\r",
+									"        let fullUrl = `${baseUrl}${endpoint}?id=${adminRollid}`;\r",
+									"        pm.request.url = fullUrl;\r",
+									" } else if(scenario1 ===\"by Admin invalid rollId\") {\r",
+									"        let idValue = pm.variables.get(\"idValue\"); \r",
+									"        let fullUrl = `${baseUrl}${endpoint}?id=${idValue}`; \r",
+									"        pm.request.url = fullUrl; \r",
+									"\r",
+									"} else if (scenario1 === \"by Staff rollId\") {\r",
+									"  \r",
+									"        let fullUrl = `${baseUrl}${endpoint}?id=${staffRollid}`;\r",
+									"        pm.request.url = fullUrl;\r",
+									"    } else if(scenario1 === \"by Staff invalid rollId\") {\r",
+									"        let idValue = pm.variables.get(\"idValue\"); \r",
+									"        let fullUrl = `${baseUrl}${endpoint}?id=${idValue}`; \r",
+									"        pm.request.url = fullUrl; \r",
+									"    } else if (scenario1 === \"by Student rollId\") {\r",
+									"        let fullUrl = `${baseUrl}${endpoint}?id=${studentRollid}`;\r",
+									"        pm.request.url = fullUrl; \r",
+									"    } else if (scenario1 === \"by Student invalid rollId\") {\r",
+									"        let idValue = pm.variables.get(\"idValue\"); \r",
+									"        let fullUrl = `${baseUrl}${endpoint}?id=${idValue}`; \r",
+									"        pm.request.url = fullUrl; \r",
+									"    }\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									" \r",
+									"\r",
+									"\r",
+									"if ((pm.response.code !== 404)&&(pm.response.code !== 401)) {\r",
+									"pm.test(\"Response contains status and count\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"   \r",
+									"    pm.expect(jsonData).to.be.an('array').that.is.not.empty;\r",
+									"    pm.expect(jsonData[0]).to.have.property('status');\r",
+									"    pm.expect(jsonData[0]).to.have.property('count');\r",
+									"    pm.expect(jsonData[0].status).to.be.a('string');\r",
+									"    pm.expect(jsonData[0].count).to.be.a('number');\r",
+									"});\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by RoleId",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by UserId",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"\r",
+									"\r",
+									"\r",
+									"let scenario = pm.variables.get(\"scenario1\");\r",
+									"let roleId = pm.variables.get(\"roleId\");\r",
+									"let endpoint= pm.variables.get(\"endpoint\");\r",
+									"\r",
+									"\r",
+									"if (scenario === \"by usersid\") {\r",
+									"    let userIdForGetRequest = null;\r",
+									"\r",
+									"    \r",
+									"    if (roleId === \"R01\") {\r",
+									"        \r",
+									"        userIdForGetRequest = pm.environment.get(\"adminUserId\");\r",
+									"        endpoint += `/${userIdForGetRequest}`;\r",
+									"        \r",
+									"    } else if (roleId === \"R02\") {\r",
+									"        \r",
+									"        userIdForGetRequest = pm.environment.get(\"staffUserId\");\r",
+									"        \r",
+									"        endpoint += `/${userIdForGetRequest}`;\r",
+									"        \r",
+									"    } else if (roleId === \"R03\") {\r",
+									"        \r",
+									"        userIdForGetRequest = pm.collectionVariables.get(\"studentUserId\");\r",
+									"       \r",
+									"        endpoint += `/${userIdForGetRequest}`;\r",
+									"    }\r",
+									"\r",
+									"    pm.variables.set(\"endpoint\", endpoint);\r",
+									"    console.log(\"Updated endpoint:\", endpoint);\r",
+									"\r",
+									"} else {\r",
+									"    console.log(\"No valid scenario found\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by BatchId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User by programID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"/*let roleIds = pm.collectionVariables.get(\"roleIds\");\r",
+							"let userId = \"\";\r",
+							"let roleId = pm.collectionVariables.get(\"roleId\"); // Get the latest roleId\r",
+							"\r",
+							"try {\r",
+							"    roleIds = roleIds ? JSON.parse(roleIds) : [];\r",
+							"} catch (e) {\r",
+							"    console.log(\"Error parsing roleIds, resetting to empty array.\");\r",
+							"    roleIds = [];\r",
+							"}\r",
+							"\r",
+							"// Retrieve User IDs\r",
+							"let adminUserId = pm.collectionVariables.get(\"adminUserId\");\r",
+							"let staffUserId = pm.collectionVariables.get(\"staffUserId\");\r",
+							"let studentUserId = pm.collectionVariables.get(\"studentUserId\");\r",
+							"\r",
+							"// Check roleId and assign the correct userId\r",
+							"if (roleId === pm.collectionVariables.get(\"adminRoleId\")) {\r",
+							"    userId = adminUserId;\r",
+							"} else if (roleId === pm.collectionVariables.get(\"staffRoleId\")) {\r",
+							"    userId = staffUserId;\r",
+							"} else if (roleId === pm.collectionVariables.get(\"studentRoleId\")) {\r",
+							"    userId = studentUserId;\r",
+							"} else {\r",
+							"    console.log(\"Role ID not matched. No userId assigned.\");\r",
+							"}\r",
+							"\r",
+							"// Store userId for PUT request\r",
+							"pm.collectionVariables.set(\"Created_userId\", userId);\r",
+							"console.log(\"Using User ID for PUT:\", userId);*/"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"\r",
+							"\r",
+							"\r",
+							"let putbyuserIdSchema=\r",
+							"{\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"userId\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userFirstName\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userLastName\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userMiddleName\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userPhoneNumber\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userLocation\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userTimeZone\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userLinkedinUrl\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userEduUg\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userEduPg\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userComments\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userVisaStatus\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"userLoginEmail\": {\r",
+							"      \"type\": \"string\"\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"userId\",\r",
+							"    \"userFirstName\",\r",
+							"    \"userLastName\",\r",
+							"    \"userMiddleName\",\r",
+							"    \"userPhoneNumber\",\r",
+							"    \"userLocation\",\r",
+							"    \"userTimeZone\",\r",
+							"    \"userLinkedinUrl\",\r",
+							"    \"userEduUg\",\r",
+							"    \"userEduPg\",\r",
+							"    \"userComments\",\r",
+							"    \"userVisaStatus\",\r",
+							"    \"userLoginEmail\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"let getallSchema = {\r",
+							"\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": [\r",
+							"        {\r",
+							"            \"type\": \"object\",\r",
+							"            \"properties\": {\r",
+							"                \"userId\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userFirstName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLastName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userMiddleName\": {\r",
+							"                    \"type\": [\"string\", \"null\"]\r",
+							"                },\r",
+							"                \"userPhoneNumber\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLocation\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userTimeZone\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLinkedinUrl\": {\r",
+							"                    \"type\": [\"string\", \"null\"]\r",
+							"                },\r",
+							"                \"userEduUg\": {\r",
+							"                    \"type\": [\"string\", \"null\"]\r",
+							"                },\r",
+							"                \"userEduPg\": {\r",
+							"                    \"type\": [\"string\", \"null\"]\r",
+							"                },\r",
+							"                \"userComments\": {\r",
+							"                    \"type\": [\"string\", \"null\"]\r",
+							"                },\r",
+							"                \"userVisaStatus\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLoginEmail\": {\r",
+							"                    \"type\": [\"string\", \"null\"]\r",
+							"                }\r",
+							"            },\r",
+							"            \"required\": [\r",
+							"                \"userId\",\r",
+							"                \"userFirstName\",\r",
+							"                \"userLastName\",\r",
+							"                //  \"userMiddleName\",\r",
+							"                \"userPhoneNumber\",\r",
+							"                \"userLocation\",\r",
+							"                \"userTimeZone\",\r",
+							"                \"userLinkedinUrl\",\r",
+							"                \"userEduUg\",\r",
+							"                \"userEduPg\",\r",
+							"                \"userComments\",\r",
+							"                \"userVisaStatus\",\r",
+							"                \"userLoginEmail\"\r",
+							"            ]\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"let getidSchema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"user\": {\r",
+							"            \"type\": \"object\",\r",
+							"            \"properties\": {\r",
+							"                \"userId\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userFirstName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLastName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userMiddleName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userPhoneNumber\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLocation\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userTimeZone\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLinkedinUrl\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userEduUg\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userEduPg\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userComments\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userVisaStatus\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLoginEmail\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                }\r",
+							"            },\r",
+							"            \"required\": [\r",
+							"                \"userId\",\r",
+							"                \"userFirstName\",\r",
+							"                \"userLastName\",\r",
+							"                \"userMiddleName\",\r",
+							"                \"userPhoneNumber\",\r",
+							"                \"userLocation\",\r",
+							"                \"userTimeZone\",\r",
+							"                \"userLinkedinUrl\",\r",
+							"                \"userEduUg\",\r",
+							"                \"userEduPg\",\r",
+							"                \"userComments\",\r",
+							"                \"userVisaStatus\",\r",
+							"                \"userLoginEmail\"\r",
+							"            ]\r",
+							"        },\r",
+							"        \"roles\": {\r",
+							"            \"type\": \"array\",\r",
+							"            \"items\": [\r",
+							"                {\r",
+							"                    \"type\": \"object\",\r",
+							"                    \"properties\": {\r",
+							"                        \"roleId\": {\r",
+							"                            \"type\": \"string\"\r",
+							"                        },\r",
+							"                        \"userRoleStatus\": {\r",
+							"                            \"type\": \"string\"\r",
+							"                        }\r",
+							"                    },\r",
+							"                    \"required\": [\r",
+							"                        \"roleId\",\r",
+							"                        \"userRoleStatus\"\r",
+							"                    ]\r",
+							"                }\r",
+							"            ]\r",
+							"        }\r",
+							"    },\r",
+							"    \"required\": [\r",
+							"        \"user\",\r",
+							"        \"roles\"\r",
+							"    ]\r",
+							"}\r",
+							"let getuserbyroleSchema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": [\r",
+							"        {\r",
+							"            \"type\": \"object\",\r",
+							"            \"properties\": {\r",
+							"                \"roleId\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"roleName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userId\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userFirstName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLastName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userRoleStatus\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userPhoneNumber\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLocation\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userTimeZone\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLinkedinUrl\": {\r",
+							"                    \"type\": \"null\"\r",
+							"                },\r",
+							"                \"userEduUg\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userVisaStatus\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLoginEmail\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                }\r",
+							"            },\r",
+							"            \"required\": [\r",
+							"                \"roleId\",\r",
+							"                \"roleName\",\r",
+							"                \"userId\",\r",
+							"                \"userFirstName\",\r",
+							"                \"userLastName\",\r",
+							"                \"userRoleStatus\",\r",
+							"                \"userPhoneNumber\",\r",
+							"                \"userLocation\",\r",
+							"                \"userTimeZone\",\r",
+							"                \"userLinkedinUrl\",\r",
+							"                \"userEduUg\",\r",
+							"                \"userVisaStatus\",\r",
+							"                \"userLoginEmail\"\r",
+							"            ]\r",
+							"        },\r",
+							"        {\r",
+							"            \"type\": \"object\"\r",
+							"        }\r",
+							"    ]\r",
+							"}\r",
+							"\r",
+							"getbybatchIdSchema = {\r",
+							"    \"type\": \"array\",\r",
+							"    \"items\": [\r",
+							"        {\r",
+							"            \"type\": \"object\",\r",
+							"            \"properties\": {\r",
+							"                \"userId\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userFirstName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLastName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userMiddleName\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userPhoneNumber\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLocation\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userTimeZone\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLinkedinUrl\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userEduUg\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userEduPg\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userComments\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userVisaStatus\": {\r",
+							"                    \"type\": \"string\"\r",
+							"                },\r",
+							"                \"userLoginEmail\": {\r",
+							"                    \"type\": \"null\"\r",
+							"                }\r",
+							"            },\r",
+							"            \"required\": [\r",
+							"                \"userId\",\r",
+							"                \"userFirstName\",\r",
+							"                \"userLastName\",\r",
+							"                \"userMiddleName\",\r",
+							"                \"userPhoneNumber\",\r",
+							"                \"userLocation\",\r",
+							"                \"userTimeZone\",\r",
+							"                \"userLinkedinUrl\",\r",
+							"                \"userEduUg\",\r",
+							"                \"userEduPg\",\r",
+							"                \"userComments\",\r",
+							"                \"userVisaStatus\",\r",
+							"                \"userLoginEmail\"\r",
+							"            ]\r",
+							"        },\r",
+							"        \r",
+							"    ]\r",
+							"}\r",
+							"let getuserbyRollidSchema ={\r",
+							"  \"type\": \"array\",\r",
+							"  \"items\": [\r",
+							"    {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"userId\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userFirstName\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLastName\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userPhoneNumber\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLocation\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userTimeZone\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLinkedinUrl\": {\r",
+							"          \"type\": [\"string\", \"null\"]\r",
+							"        },\r",
+							"        \"userEduUg\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userEduPg\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userVisaStatus\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLoginEmail\": {\r",
+							"          \"type\": \"string\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"userId\",\r",
+							"        \"userFirstName\",\r",
+							"        \"userLastName\",\r",
+							"        \"userPhoneNumber\",\r",
+							"        \"userLocation\",\r",
+							"        \"userTimeZone\",\r",
+							"        \"userLinkedinUrl\",\r",
+							"        \"userEduUg\",\r",
+							"        \"userEduPg\",\r",
+							"        \"userVisaStatus\",\r",
+							"        \"userLoginEmail\"\r",
+							"      ]\r",
+							"    }\r",
+							"  ]\r",
+							"}\r",
+							"let getuserbyrollidV2Schema={\r",
+							" \r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"users\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"userId\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userFirstName\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userLastName\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userMiddleName\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userPhoneNumber\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userLocation\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userTimeZone\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userLinkedinUrl\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userEduUg\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userEduPg\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userComments\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userVisaStatus\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userLoginEmail\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"userId\",\r",
+							"            \"userFirstName\",\r",
+							"            \"userLastName\",\r",
+							"            \"userMiddleName\",\r",
+							"            \"userPhoneNumber\",\r",
+							"            \"userLocation\",\r",
+							"            \"userTimeZone\",\r",
+							"            \"userLinkedinUrl\",\r",
+							"            \"userEduUg\",\r",
+							"            \"userEduPg\",\r",
+							"            \"userComments\",\r",
+							"            \"userVisaStatus\",\r",
+							"            \"userLoginEmail\"\r",
+							"          ]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"users\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"let postvalidSchema={\r",
+							"\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"user\": {\r",
+							"      \"type\": \"object\",\r",
+							"      \"properties\": {\r",
+							"        \"userId\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userFirstName\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLastName\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userMiddleName\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userPhoneNumber\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLocation\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userTimeZone\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLinkedinUrl\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userEduUg\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userEduPg\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userComments\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userVisaStatus\": {\r",
+							"          \"type\": \"string\"\r",
+							"        },\r",
+							"        \"userLoginEmail\": {\r",
+							"          \"type\": \"string\"\r",
+							"        }\r",
+							"      },\r",
+							"      \"required\": [\r",
+							"        \"userId\",\r",
+							"        \"userFirstName\",\r",
+							"        \"userLastName\",\r",
+							"        \"userMiddleName\",\r",
+							"        \"userPhoneNumber\",\r",
+							"        \"userLocation\",\r",
+							"        \"userTimeZone\",\r",
+							"        \"userLinkedinUrl\",\r",
+							"        \"userEduUg\",\r",
+							"        \"userEduPg\",\r",
+							"        \"userComments\",\r",
+							"        \"userVisaStatus\",\r",
+							"        \"userLoginEmail\"\r",
+							"      ]\r",
+							"    },\r",
+							"    \"roles\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": \"object\",\r",
+							"          \"properties\": {\r",
+							"            \"roleId\": {\r",
+							"              \"type\": \"string\"\r",
+							"            },\r",
+							"            \"userRoleStatus\": {\r",
+							"              \"type\": \"string\"\r",
+							"            }\r",
+							"          },\r",
+							"          \"required\": [\r",
+							"            \"roleId\",\r",
+							"            \"userRoleStatus\"\r",
+							"          ]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"user\",\r",
+							"    \"roles\"\r",
+							"  ]\r",
+							"}\r",
+							"\r",
+							"if(pm.response.code === 201) {\r",
+							"         if(pm.variables.get(\"schemaValidation\")===\"post\"){\r",
+							"     pm.test(\"Response matches the schema\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(postvalidSchema);\r",
+							"        });\r",
+							"}\r",
+							"\r",
+							" if (pm.response.code === 200) {\r",
+							"    // Check if schemaValidation is \"yes\"\r",
+							"    if (pm.variables.get(\"schemaValidation\") === \"yes\") {\r",
+							"        pm.test(\"Response matches the schema\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(getallSchema);\r",
+							"        });\r",
+							"    }\r",
+							"  \r",
+							"    else if (pm.variables.get(\"schemaValidation\") === \"byId\") {\r",
+							"        pm.test(\"Response matches the schema for ID\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(getidSchema);\r",
+							"        });\r",
+							"    }\r",
+							"    else if (pm.variables.get(\"schemaValidation\") === \"byRole\") {\r",
+							"        pm.test(\"Response matches the schema for ID\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(getuserbyroleSchema);\r",
+							"        });\r",
+							"    }\r",
+							"    else if (pm.variables.get(\"schemaValidation\") === \"byBatchId\") {\r",
+							"        pm.test(\"Response matches the schema for ID\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(getbybatchIdSchema);\r",
+							"        });\r",
+							"    }\r",
+							"     else if (pm.variables.get(\"schemaValidation\") === \"byRollId\") {\r",
+							"        pm.test(\"Response matches the schema for ID\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(getuserbyRollidSchema);\r",
+							"        });\r",
+							"    }\r",
+							"    else if(pm.variables.get(\"schemaValidation\") === \"byRollIdV2\"){\r",
+							"         pm.test(\"Response matches the schema for ID\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(getuserbyrollidV2Schema);\r",
+							"         });\r",
+							"\r",
+							"}\r",
+							"   else if (pm.variables.get(\"schemaValidation\") === \"putbyuserId\") {\r",
+							"        pm.test(\"Response matches the schema\", function () {\r",
+							"            pm.expect(pm.response.json()).to.have.jsonSchema(putbyuserIdSchema);\r",
+							"        });\r",
+							"    }\r",
+							"\r",
+							" \r",
+							"    \r",
+							" }\r",
+							" \r",
+							"}\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							"\r",
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Class",
+			"item": [
+				{
+					"name": "Create Class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"pm.environment.set(\"ClassId\",jsonData.csId);\r",
+									"pm.environment.set(\"ClassTopic\",jsonData.classTopic);\r",
+									"SchemaValidation.validateNewClassSchema();\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"batchId\": {{batchId}},\r\n    \"classNo\": {{classNo}},\r\n    \"classDate\": \"{{classDate}}\",\r\n    \"classTopic\": \"{{classTopic}}\",\r\n    \"classStatus\": \"{{classStatus}}\",\r\n    \"classStaffId\": \"{{classStaffId}}\",\r\n    \"classDescription\": \"{{classDescription}}\",\r\n    \"classComments\": \"{{classComments}}\",\r\n    \"classNotes\": \"{{classNotes}}\",\r\n    \"classRecordingPath\": \"{{classRecordingPath}}\",\r\n    \"classScheduledDates\": [\r\n    \"{{classScheduledDates_1}}\",\r\n    \"{{classScheduledDates_2}}\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All Classes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetClassSchema();\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Upcoming classes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetRecordingSchema();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recording by BatchId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetRecordingSchema();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Classdetail by Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetClassList();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class by class Topic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetClassList();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class by Batch id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetClassList();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class by staffId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetClassList();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "All recordings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetRecordingSchema();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class by classId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validateGetClassList();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New class",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validatePutClassidSchema();\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"batchId\": {{batchId}},\r\n    \"classNo\": {{classNo}},\r\n    \"classDate\": \"{{classDate}}\",\r\n    \"classTopic\": \"{{classTopic}}\",\r\n    \"classStatus\": \"{{classStatus}}\",\r\n    \"classStaffId\": \"{{classStaffId}}\",\r\n    \"classDescription\": \"{{classDescription}}\",\r\n    \"classComments\": \"{{classComments}}\",\r\n    \"classNotes\": \"{{classNotes}}\",\r\n    \"classRecordingPath\": \"{{classRecordingPath}}\",\r\n    \"classScheduledDates\": [\r\n    \"{{classScheduledDates_1}}\",\r\n    \"{{classScheduledDates_2}}\"\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class Recording Path",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {\r",
+									"var jsonData = JSON.parse(pm.response.text());\r",
+									"SchemaValidation.validatePutRecordingSchema();\r",
+									"}\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"classRecordingPath\": \"{{classRecordingPath}}\",\r\n\"csId\": {{csId}}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							"SchemaValidation = {\r",
+							"validateNewClassSchema:function () {\r",
+							"    pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"    const schema={\r",
+							"      \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"csId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"batchId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classNo\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classDate\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classTopic\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStatus\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStaffId\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classDescription\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classComments\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classNotes\": {\r",
+							"      \"type\": [\"string\",\"null\"]},\r",
+							"\r",
+							"    \"classRecordingPath\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"batchName\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classScheduledDates\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"csId\",\r",
+							"    \"batchId\",\r",
+							"    \"classNo\",\r",
+							"    \"classDate\",\r",
+							"    \"classTopic\",\r",
+							"    \"classStatus\",\r",
+							"    \"classStaffId\",\r",
+							"    \"classDescription\",\r",
+							"    \"classComments\",\r",
+							"    \"classNotes\",\r",
+							"    \"classRecordingPath\",\r",
+							"    \"batchName\",\r",
+							"    \"classScheduledDates\"\r",
+							"  ]\r",
+							"}\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    });\r",
+							"},//validateNewClassSchema function closing\r",
+							"validateGetClassSchema:function () {\r",
+							"    pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"    const schema={\r",
+							"      \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"csId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"batchId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classNo\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classDate\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classTopic\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStatus\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStaffId\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classDescription\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classComments\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classNotes\": {\r",
+							"      \"type\": [\"string\",\"null\"]},\r",
+							"\r",
+							"    \"classRecordingPath\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"batchName\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classScheduledDates\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"csId\",\r",
+							"    \"batchId\",\r",
+							"    \"classNo\",\r",
+							"    \"classDate\",\r",
+							"    \"classTopic\",\r",
+							"    \"classStatus\",\r",
+							"    \"classStaffId\",\r",
+							"    \"classDescription\",\r",
+							"    \"classComments\",\r",
+							"    \"classNotes\",\r",
+							"    \"classRecordingPath\",\r",
+							"    \"batchName\",\r",
+							"    \"classScheduledDates\"\r",
+							"  ]\r",
+							"}\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    });\r",
+							"   \r",
+							"},//validateGetClassSchema funtion closing\r",
+							"\r",
+							" validateGetRecordingSchema:function() {\r",
+							"    pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"    // Define the JSON schema\r",
+							"var schema={\r",
+							"   \r",
+							"//   \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"csId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classRecordingPath\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"csId\",\r",
+							"    \"classRecordingPath\"\r",
+							"  ]\r",
+							"}\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    });\r",
+							"},//validateGetRecordingSchema funtion closing\r",
+							"validatePutClassidSchema:function () {\r",
+							"    pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"    // Define the JSON schema\r",
+							"   var schema = {\r",
+							"\r",
+							"  //\"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"csId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"batchId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classNo\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classDate\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classTopic\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStatus\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStaffId\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classDescription\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classComments\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classNotes\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classRecordingPath\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"batchName\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classScheduledDates\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"csId\",\r",
+							"    \"batchId\",\r",
+							"    \"classNo\",\r",
+							"    \"classDate\",\r",
+							"    \"classTopic\",\r",
+							"    \"classStatus\",\r",
+							"    \"classStaffId\",\r",
+							"    \"classDescription\",\r",
+							"    \"classComments\",\r",
+							"    \"classNotes\",\r",
+							"    \"classRecordingPath\",\r",
+							"    \"batchName\",\r",
+							"    \"classScheduledDates\"\r",
+							"  ]\r",
+							"\r",
+							"}\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    });\r",
+							"},//validatePutClassidSchema closing function\r",
+							" validatePutRecordingSchema:function() {\r",
+							"    pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"    // Define the JSON schema\r",
+							"   var schema = {\r",
+							"//   \"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"csId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"batchId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classNo\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classDate\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classTopic\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStatus\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStaffId\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classDescription\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classComments\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classNotes\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classRecordingPath\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"batchName\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classScheduledDates\": {\r",
+							"      \"type\": \"array\",\r",
+							"      \"items\": [\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        },\r",
+							"        {\r",
+							"          \"type\": [\"string\",\"null\"]\r",
+							"        }\r",
+							"      ]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"csId\",\r",
+							"    \"batchId\",\r",
+							"    \"classNo\",\r",
+							"    \"classDate\",\r",
+							"    \"classTopic\",\r",
+							"    \"classStatus\",\r",
+							"    \"classStaffId\",\r",
+							"    \"classDescription\",\r",
+							"    \"classComments\",\r",
+							"    \"classNotes\",\r",
+							"    \"classRecordingPath\",\r",
+							"    \"batchName\",\r",
+							"    \"classScheduledDates\"\r",
+							"  ]\r",
+							"}\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    });\r",
+							"},//validatePutRecordingSchema closing function\r",
+							"validateGetClassList:function () {\r",
+							"    pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"    // Define the JSON schema\r",
+							"   var schema = {\r",
+							"\r",
+							"  //\"$schema\": \"http://json-schema.org/draft-04/schema#\",\r",
+							"  \"type\": \"object\",\r",
+							"  \"properties\": {\r",
+							"    \"csId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"batchId\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classNo\": {\r",
+							"      \"type\": [\"integer\" , \"null\"]\r",
+							"    },\r",
+							"    \"classDate\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classTopic\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStatus\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classStaffId\": {\r",
+							"      \"type\": \"string\"\r",
+							"    },\r",
+							"    \"classDescription\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classComments\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classNotes\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classRecordingPath\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"batchName\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    },\r",
+							"    \"classScheduledDates\": {\r",
+							"      \"type\": [\"string\",\"null\"]\r",
+							"    }\r",
+							"  },\r",
+							"  \"required\": [\r",
+							"    \"csId\",\r",
+							"    \"batchId\",\r",
+							"    \"classNo\",\r",
+							"    \"classDate\",\r",
+							"    \"classTopic\",\r",
+							"    \"classStatus\",\r",
+							"    \"classStaffId\",\r",
+							"    \"classDescription\",\r",
+							"    \"classComments\",\r",
+							"    \"classNotes\",\r",
+							"    \"classRecordingPath\",\r",
+							"    \"batchName\",\r",
+							"    \"classScheduledDates\"\r",
+							"  ]\r",
+							"}\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    });\r",
+							"},//validateGetClassList\r",
+							"// validateGetClassDetailsById:function () {\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"//    var schema = {\r",
+							"//     \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"batchId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classNo\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classDate\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classTopic\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStatus\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStaffId\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classDescription\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classComments\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classNotes\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"batchName\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classScheduledDates\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"batchId\",\r",
+							"//     \"classNo\",\r",
+							"//     \"classDate\",\r",
+							"//     \"classTopic\",\r",
+							"//     \"classStatus\",\r",
+							"//     \"classStaffId\",\r",
+							"//     \"classDescription\",\r",
+							"//     \"classComments\",\r",
+							"//     \"classNotes\",\r",
+							"//     \"classRecordingPath\",\r",
+							"//     \"batchName\",\r",
+							"//     \"classScheduledDates\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"// },//validateGetClassDetailsById function closing\r",
+							"// validateGetClassesByClassTopic:function () {\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"//    var schema = {\r",
+							"//     \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"batchId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classNo\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classDate\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classTopic\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStatus\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStaffId\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classDescription\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classComments\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classNotes\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"batchName\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classScheduledDates\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"batchId\",\r",
+							"//     \"classNo\",\r",
+							"//     \"classDate\",\r",
+							"//     \"classTopic\",\r",
+							"//     \"classStatus\",\r",
+							"//     \"classStaffId\",\r",
+							"//     \"classDescription\",\r",
+							"//     \"classComments\",\r",
+							"//     \"classNotes\",\r",
+							"//     \"classRecordingPath\",\r",
+							"//     \"batchName\",\r",
+							"//     \"classScheduledDates\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"// },//validateGetClassesByClassTopic function closing\r",
+							"// validateGetClassesByBatchId:function () {\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"//    var schema = {\r",
+							"//     \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"batchId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classNo\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classDate\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classTopic\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStatus\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStaffId\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classDescription\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classComments\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classNotes\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"batchName\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classScheduledDates\": {\r",
+							"//       \"type\": \"array\",\r",
+							"//       \"items\": [\r",
+							"//         {\r",
+							"//           \"type\": [\"string\",\"null\"]\r",
+							"//         },\r",
+							"//         {\r",
+							"//           \"type\": [\"string\",\"null\"]\r",
+							"//         },\r",
+							"//         {\r",
+							"//           \"type\": [\"string\",\"null\"]\r",
+							"//         }\r",
+							"//       ]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"batchId\",\r",
+							"//     \"classNo\",\r",
+							"//     \"classDate\",\r",
+							"//     \"classTopic\",\r",
+							"//     \"classStatus\",\r",
+							"//     \"classStaffId\",\r",
+							"//     \"classDescription\",\r",
+							"//     \"classComments\",\r",
+							"//     \"classNotes\",\r",
+							"//     \"classRecordingPath\",\r",
+							"//     \"batchName\",\r",
+							"//     \"classScheduledDates\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"// },//validateGetClassesByBatchId function closing\r",
+							"// validateGetClassesByStaffId:function () {\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"//    var schema = {\r",
+							"//   \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"batchId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classNo\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classDate\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classTopic\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStatus\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classStaffId\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classDescription\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classComments\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classNotes\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"batchName\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     },\r",
+							"//     \"classScheduledDates\": {\r",
+							"//       \"type\": \"array\",\r",
+							"//       \"items\": [\r",
+							"//         {\r",
+							"//           \"type\": [\"string\",\"null\"]\r",
+							"//         },\r",
+							"//         {\r",
+							"//           \"type\": [\"string\",\"null\"]\r",
+							"//         },\r",
+							"//         {\r",
+							"//           \"type\": [\"string\",\"null\"]\r",
+							"//         }\r",
+							"//       ]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"batchId\",\r",
+							"//     \"classNo\",\r",
+							"//     \"classDate\",\r",
+							"//     \"classTopic\",\r",
+							"//     \"classStatus\",\r",
+							"//     \"classStaffId\",\r",
+							"//     \"classDescription\",\r",
+							"//     \"classComments\",\r",
+							"//     \"classNotes\",\r",
+							"//     \"classRecordingPath\",\r",
+							"//     \"batchName\",\r",
+							"//     \"classScheduledDates\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"// },//validateGetClassesByStaffId function closing\r",
+							"// validateGetAllRecordings:function () {\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"// pm.globals.set(\"variable_key\", \"variable_value\");\r",
+							"// pm.globals.set(\"variable_key\", \"variable_value\");\r",
+							"//    var schema = {\r",
+							"//     \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"classRecordingPath\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"// },//validateGetAllRecordings function closing\r",
+							"// validateGetClassRecordingsByClassId:function (){\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"//    var schema = {\r",
+							"//     \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"classRecordingPath\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"// },//validateGetClassRecordingsByClassId function closing\r",
+							"// validateGetClassRecordingsByBatchId:function () {\r",
+							"//     pm.test(\"Response Schema matches expected schema\", function() {\r",
+							"//     // Define the JSON schema\r",
+							"//    var schema = {\r",
+							"//      \"type\": \"object\",\r",
+							"//   \"properties\": {\r",
+							"//     \"csId\": {\r",
+							"//       \"type\": [\"integer\" , \"null\"]\r",
+							"//     },\r",
+							"//     \"classRecordingPath\": {\r",
+							"//       \"type\": [\"string\",\"null\"]\r",
+							"//     }\r",
+							"//   },\r",
+							"//   \"required\": [\r",
+							"//     \"csId\",\r",
+							"//     \"classRecordingPath\"\r",
+							"//   ]\r",
+							"// }\r",
+							"// pm.response.to.have.jsonSchema(schema);\r",
+							"//     });\r",
+							"\r",
+							"// }//validateGetClassRecordingsByBatchId function closing\r",
+							"}//commonTests function closing\r",
+							"\r",
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Logout",
+			"item": [
+				{
+					"name": "Logout",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Delete/Cleanup",
+			"item": [
+				{
+					"name": "Delete Batch",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let scenario = pm.variables.get(\"scenario\");\r",
+									"let expectedStatusCode = pm.variables.get(\"expectedStatusCode\");\r",
+									"let expectedStatusMessage = pm.variables.get(\"expectedStatusMessage\");\r",
+									"\r",
+									"if (pm.response.code === 200) {\r",
+									"    let responseText = pm.response.text(); \r",
+									"    let batchId = pm.collectionVariables.get(\"BatchId\"); \r",
+									"\r",
+									"    let expectedMessage = `Message: Batch with Id-${batchId} deleted Successfully!`\r",
+									"\r",
+									"    pm.test(` Deleted user Id (${batchId})`, function () {\r",
+									"        pm.expect(responseText).to.include(expectedMessage);\r",
+									"    });\r",
+									"\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Batch By BatchId Negative Scenarios",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete by program name",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"programIds\", []);\r",
+									"pm.environment.set(\"ProgramNames\", []);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "class",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Class Negative",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Program by id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// let expectedStatusCode = pm.variables.get(\"expectedStatusCode\");\r",
+									"// let expectedStatusMessage = pm.variables.get(\"expectedStatusMessage\");`"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cleanup",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"let userIds = pm.collectionVariables.get(\"userIds\");\r",
+									" pm.collectionVariables.unset(\"Admin_rollid\");\r",
+									"    pm.collectionVariables.unset(\"Staff_rollid\");\r",
+									"     pm.collectionVariables.unset(\"Student_rollid\");\r",
+									"    pm.environment.unset(\"adminUserId\");\r",
+									"     pm.environment.unset(\"staffUserId\");\r",
+									"    pm.environment.unset(\"studentUserId\");\r",
+									"    pm.collectionVariables.unset(\"latestRoleId\");\r",
+									"    pm.collectionVariables.unset(\"Created_userId\");\r",
+									"    pm.environment.unset(\"ProgramNames\");\r",
+									"     pm.environment.unset(\"ProgramName\");\r",
+									"      pm.environment.unset(\"programIds\");\r",
+									"     pm.environment.unset(\"programID\");\r",
+									"\r",
+									"\r",
+									"if (userIds) {\r",
+									"    try {\r",
+									"\r",
+									"        userIds = JSON.parse(userIds);\r",
+									"    } catch (e) {\r",
+									"        console.log(\"Parsing failed, resetting userIds.\");\r",
+									"        userIds = [];\r",
+									"    }\r",
+									"    pm.collectionVariables.unset(\"userIds\");\r",
+									"    console.log(\"User IDs have been cleared and unset.\");\r",
+									"} else {\r",
+									"    console.log(\"No userIds to clean up.\");\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{Base_URL}}{{endpoint}}",
+							"host": [
+								"{{Base_URL}}{{endpoint}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"if(typeof pm.variables.get('requestData') !== 'object')\r",
+					"{\r",
+					"    pm.variables.set('requestData', pm.iterationData.toObject());\r",
+					"}\r",
+					"\r",
+					"const requestData = pm.variables.get('requestData');\r",
+					"\r",
+					"if(typeof requestData != 'object' || Object.keys(requestData).length === 0)\r",
+					"{\r",
+					"    console.log('No external data provided/data set is empty');\r",
+					"    return;\r",
+					"}\r",
+					"\r",
+					"const currentRequest = requestData.requests.filter(({name}) => name === pm.info.requestName)[0];\r",
+					"\r",
+					"if(!currentRequest){\r",
+					"    console.log('Request ${pm.info.requestName} has no data.');\r",
+					"}\r",
+					"\r",
+					"if(currentRequest){\r",
+					"\r",
+					"    const variables = currentRequest.data.shift();\r",
+					"\r",
+					"    Object.entries(variables).forEach(([key, value]) => {\r",
+					"        pm.variables.set(key, value);\r",
+					"    });\r",
+					"\r",
+					"  //This code is to check invalid base url scenario\r",
+					"\r",
+					"\r",
+					"let scenario = pm.variables.get(\"scenario1\");\r",
+					"let endpoint = pm.variables.get(\"endpoint\");\r",
+					"\r",
+					"let baseUrl;\r",
+					"\r",
+					"if (scenario === \"invalidBaseURL\") {\r",
+					"    baseUrl = pm.variables.get(\"invalidBase_URL\");\r",
+					"} else {\r",
+					"    baseUrl = pm.environment.get(\"Base_URL\");\r",
+					"}\r",
+					"\r",
+					"let newUrl = baseUrl + endpoint;\r",
+					"pm.request.url = newUrl;\r",
+					"console.log(\"Using URL:\", newUrl);\r",
+					"\r",
+					"   if (variables.includeAuth.toLowerCase() === 'true') {\r",
+					"        const token = pm.environment.get('BearerToken');  \r",
+					"        pm.request.headers.add({ key: 'Authorization', value: `Bearer ${token}` });\r",
+					"    } else if(variables.includeAuth.toLowerCase() === 'invalid') {\r",
+					"         const token = pm.variables.get('invalidToken');  \r",
+					"         console.log(token);\r",
+					"        pm.request.headers.add({ key: 'Authorization', value: `Bearer ${token}` });\r",
+					"    }else  {\r",
+					"       console.log(\"No Authorization header needed\"); \r",
+					"    }\r",
+					"    pm.variables.set('requestData', requestData);\r",
+					"\r",
+					"    if(currentRequest.data.length > 0){\r",
+					"       pm.execution.setNextRequest(pm.info.requestName);\r",
+					"    }\r",
+					"       \r",
+					"}\t\t"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					"commonTests = {\r",
+					"    validateStatusLine: function(expectedStatusCode, expectedStatusMessage) {\r",
+					"        pm.test(`Status code is ${expectedStatusCode}`, () => {\r",
+					"            pm.response.to.have.status(expectedStatusCode);  \r",
+					"        });\r",
+					"        pm.test(`Status message is '${expectedStatusMessage}'`, () => {\r",
+					"            pm.response.to.have.status(expectedStatusMessage);\r",
+					"        });        \r",
+					"    },\r",
+					"\r",
+					"    validateResponseHeader: function() {\r",
+					"        pm.test(\"Response Header Content-Type is application/json\", function () {\r",
+					"            pm.response.to.have.header(\"Content-Type\", \"application/json\");\r",
+					"        });\r",
+					"    },\r",
+					"\r",
+					"    validateResponseHasBody: function() {\r",
+					"        pm.test(\"Verify Response has Body or not\", function(){\r",
+					"            pm.response.to.be.withBody;\r",
+					"        });\r",
+					"    },\r",
+					"\r",
+					"    validateResponseBodyAsJson: function() {\r",
+					"        pm.test(\"Verify Response Body as JSON\", function(){\r",
+					"            pm.response.to.be.json;\r",
+					"        });\r",
+					"    },\r",
+					"\r",
+					"    validateResponseTime: function() {\r",
+					"        pm.test(\"Response time is less than 2000ms\", function () {\r",
+					"            pm.expect(pm.response.responseTime).to.be.below(2000);\r",
+					"        });\r",
+					"    },\r",
+					"    \r",
+					"    validateResponseisArray: function() {\r",
+					"        pm.test(\"Response is an array\", function () {\r",
+					"            pm.expect(Array.isArray(pm.response.json())).to.be.true;\r",
+					"        });\r",
+					"    }\r",
+					"}\r",
+					"const expectedStatusCode = pm.variables.get(\"expectedStatusCode\");\r",
+					"const expectedStatusMessage = pm.variables.get(\"expectedStatusMessage\");\r",
+					"const scenario = pm.variables.get(\"scenario\");\r",
+					"const skipTest = pm.variables.get(\"skipTest\");\r",
+					"\r",
+					"if ((pm.response.code === 200) || (pm.response.code === 201)) {\r",
+					"    \r",
+					"\r",
+					"    if (skipTest === \"true\") { \r",
+					"        console.log(\"Skipping the common Test\");\r",
+					"    } else {\r",
+					"        // Execute common tests\r",
+					"        commonTests.validateStatusLine(expectedStatusCode, expectedStatusMessage);\r",
+					"        commonTests.validateResponseHeader();\r",
+					"        commonTests.validateResponseHasBody();\r",
+					"        commonTests.validateResponseBodyAsJson();\r",
+					"        commonTests.validateResponseTime();\r",
+					"    \r",
+					"    }\r",
+					"\r",
+					"} else {\r",
+					"\r",
+					"    commonTests.validateStatusLine(expectedStatusCode, expectedStatusMessage);\r",
+					"    commonTests.validateResponseTime();\r",
+					"}\r",
+					"\r",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "accessToken",
+			"value": ""
+		},
+		{
+			"key": "authToken",
+			"value": ""
+		},
+		{
+			"key": "localprogramname",
+			"value": "localprogname"
+		},
+		{
+			"key": "testurl",
+			"value": ""
+		},
+		{
+			"key": "BatchId",
+			"value": ""
+		},
+		{
+			"key": "BatchName",
+			"value": ""
+		},
+		{
+			"key": "adminRoleId",
+			"value": ""
+		},
+		{
+			"key": "staffRoleId",
+			"value": ""
+		},
+		{
+			"key": "studentRoleId",
+			"value": ""
+		}
+	]
+}
